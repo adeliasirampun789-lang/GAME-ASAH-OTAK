@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Asah Otak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&display=swap">
+<style>
+:root{--bg:#EDF1F8;--ink:#17203A;--mut:#5B6785;--card:#fff;--line:#D6DDEB;--accent:#3D5AFE;--ok:#1FA37A;--bad:#E5484D;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#11172B;--ink:#EEF1FA;--mut:#9AA6C8;--card:#1B2340;--line:#2C3760;--accent:#6C84FF;--ok:#3CCB9F;--bad:#FF6B70;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#11172B;--ink:#EEF1FA;--mut:#9AA6C8;--card:#1B2340;--line:#2C3760;--accent:#6C84FF;--ok:#3CCB9F;--bad:#FF6B70;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:500 16px/1.5 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:460px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:clamp(2.4rem,11vw,3.4rem);line-height:1;margin:18px 0 10px;font-weight:800;letter-spacing:-.03em}
+.lead{color:var(--mut);margin:0 0 24px;max-width:34ch}
+.gcard{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:center;width:100%;text-align:left;margin-bottom:14px;padding:16px;border:2px solid var(--line);border-radius:22px;background:var(--card);transition:transform .15s,border-color .15s}
+.gcard:hover,.gcard:active{transform:translateY(-2px);border-color:var(--c)}
+.ic{grid-row:span 2;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;font-size:30px;background:var(--c)}
+.gcard strong{font-size:1.2rem;font-weight:800}
+.gcard small{color:var(--mut);font-size:.9rem;line-height:1.35}
+.bs{grid-column:1/-1;margin-top:8px;font-size:.85rem;color:var(--mut)}
+.bs b{color:var(--ink)}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.back{border:2px solid var(--line);background:var(--card);border-radius:14px;padding:8px 14px;font-weight:700}
+.top h2{margin:0;font-size:1.3rem;font-weight:800}
+#info{min-height:3em;color:var(--mut);font-weight:700;margin:0 0 12px}
+#area{display:grid;justify-items:center}
+.grid3,.grid4{display:grid;gap:10px;width:100%}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid4{grid-template-columns:repeat(4,1fr);gap:8px}
+.tile{aspect-ratio:1;border:0;border-radius:20px;background:hsl(var(--c) 65% 55%);opacity:.3;transition:opacity .1s,transform .1s,box-shadow .1s}
+.tile.on{opacity:1;transform:scale(1.06);box-shadow:0 0 0 4px var(--card),0 0 28px hsl(var(--c) 80% 60%)}
+.tile.bad{opacity:1;background:var(--bad);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.q{font-size:clamp(3rem,16vw,4.6rem);font-weight:800;letter-spacing:-.02em;margin:10px 0 22px;font-variant-numeric:tabular-nums}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.opt{padding:22px 8px;border:2px solid var(--line);border-radius:20px;background:var(--card);font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+.card{position:relative;aspect-ratio:1;border:0;padding:0;background:none;perspective:600px}
+.card .f,.card .b{position:absolute;inset:0;border-radius:14px;display:grid;place-items:center;backface-visibility:hidden;transition:transform .35s}
+.card .f{background:var(--accent)}
+.card .b{background:var(--card);border:2px solid var(--line);transform:rotateY(180deg);font-size:clamp(1.6rem,9vw,2.6rem)}
+.card.up .f{transform:rotateY(-180deg)}
+.card.up .b{transform:rotateY(0)}
+.card.done .b{border-color:var(--ok)}
+.restart{display:block;margin:22px auto 0;border:0;background:none;color:var(--mut);font-weight:700;text-decoration:underline;padding:8px}
+.ov{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:rgba(10,14,30,.6);z-index:5}
+.ov[hidden]{display:none}
+.box{width:100%;max-width:340px;background:var(--card);border-radius:26px;padding:28px 22px;text-align:center}
+.box h3{margin:0 0 6px;font-size:1.3rem}
+.big{font-size:4rem;font-weight:800;line-height:1.1;letter-spacing:-.03em}
+.box p{margin:0 0 20px;color:var(--mut)}
+.btn{display:block;width:100%;padding:14px;border-radius:16px;border:2px solid var(--line);background:var(--card);font-weight:800;margin-top:10px}
+.btn.main{background:var(--accent);border-color:var(--accent);color:#fff}
+.qt{width:100%;font-size:1.35rem;font-weight:800;line-height:1.3;margin:6px 0 18px}
+.qo{display:grid;gap:10px;width:100%}
+.qb{padding:16px;border:2px solid var(--line);border-radius:16px;background:var(--card);font-weight:700;text-align:left;font-size:1.05rem}
+.qb.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.qb.bad{background:var(--bad);border-color:var(--bad);color:#fff}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section id="menu">
+    <h1>Asah Otak</h1>
+    <p class="lead">Empat permainan singkat untuk melatih ingatan, hitungan, dan fokus. Rekormu tersimpan di perangkat ini.</p>
+    <button class="gcard" data-g="seq" style="--c:#FFC547"><span class="ic">🟨</span><strong>Urutan Kotak</strong><small>Ingat urutan kotak yang menyala, lalu tekan dengan urutan yang sama.</small><span class="bs">Rekor: <b id="b-seq">0</b> level</span></button>
+    <button class="gcard" data-g="math" style="--c:#7FE0C0"><span class="ic">➕</span><strong>Hitung Kilat</strong><small>Jawab sebanyak mungkin soal dalam 45 detik. Jawaban beruntun menambah skor.</small><span class="bs">Rekor: <b id="b-math">0</b> poin</span></button>
+    <button class="gcard" data-g="pairs" style="--c:#FF8F7A"><span class="ic">🃏</span><strong>Pasang Kartu</strong><small>Buka dua kartu dan temukan semua pasangan dengan langkah paling sedikit.</small><span class="bs">Rekor: <b id="b-pairs">0</b> poin</span></button>
+    <button class="gcard" data-g="quiz" style="--c:#B9A6FF"><span class="ic">💡</span><strong>Pengetahuan Umum</strong><small>50 soal dari sejarah, sains, geografi, dan budaya. Tiap putaran berisi 10 soal acak.</small><span class="bs">Rekor: <b id="b-quiz">0</b> poin</span></button>
+  </section>
+  <section id="game" hidden>
+    <div class="top"><button class="back" id="back">‹ Menu</button><h2 id="ttl"></h2></div>
+    <p id="info" aria-live="polite"></p>
+    <div id="area"></div>
+    <button class="restart" id="restart">Mulai ulang</button>
+  </section>
+</main>
+<div class="ov" id="ov" hidden>
+  <div class="box" role="dialog" aria-modal="true" aria-labelledby="ot">
+    <h3 id="ot"></h3>
+    <div class="big" id="os">0</div>
+    <p><span id="ou"></span><br><span id="ob"></span></p>
+    <button class="btn main" id="again">Main lagi</button>
+    <button class="btn" id="tomenu">Kembali ke menu</button>
+  </div>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const G={};let run=0,timers=[],cur=null;
+const best=k=>{try{return +localStorage.getItem('ao_'+k)||0}catch(e){return 0}};
+const saveBest=(k,v)=>{try{localStorage.setItem('ao_'+k,v)}catch(e){}};
+const later=(f,ms)=>{const id=run;timers.push(setTimeout(()=>{if(id===run)f()},ms))};
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+function stopAll(){run++;timers.forEach(clearTimeout);timers=[];clearInterval(G.iv)}
+function renderBest(){['seq','math','pairs','quiz'].forEach(k=>$('#b-'+k).textContent=best(k))}
+function menu(){stopAll();cur=null;$('#ov').hidden=true;$('#game').hidden=true;$('#menu').hidden=false;renderBest()}
+function start(){stopAll();$('#ov').hidden=true;$('#ttl').textContent=games[cur].title;games[cur].init()}
+function openGame(k){cur=k;$('#menu').hidden=true;$('#game').hidden=false;start()}
+function end(t,sc,k,u){
+  const b=best(k),nb=sc>b;if(nb)saveBest(k,sc);
+  $('#ot').textContent=t;$('#os').textContent=sc;$('#ou').textContent=u;
+  $('#ob').textContent=nb&&sc>0?'Rekor baru!':'Rekor terbaikmu: '+Math.max(b,sc);
+  $('#ov').hidden=false;$('#again').focus();
+}
+const games={
+seq:{title:'Urutan Kotak',init(){
+  let s=[],pos=0,lock=true,lvl=0;
+  $('#area').innerHTML='<div class="grid3">'+[...Array(9)].map((_,i)=>`<button class="tile" style="--c:${i*40}" aria-label="Kotak ${i+1}"></button>`).join('')+'</div>';
+  const T=[...document.querySelectorAll('.tile')];
+  const info=t=>$('#info').textContent=t;
+  const flash=(i,ms)=>{T[i].classList.add('on');setTimeout(()=>T[i].classList.remove('on'),ms)};
+  const round=()=>{
+    lvl++;s.push(rnd(0,8));pos=0;lock=true;info(`Level ${lvl} · Perhatikan urutannya`);
+    const gap=Math.max(380,700-lvl*25);
+    s.forEach((v,n)=>later(()=>flash(v,gap*.6),600+n*gap));
+    later(()=>{lock=false;info(`Level ${lvl} · Giliranmu`)},600+s.length*gap);
+  };
+  T.forEach((b,i)=>b.onclick=()=>{
+    if(lock)return;
+    if(i!==s[pos]){lock=true;b.classList.add('bad');later(()=>end('Urutan salah',lvl-1,'seq','level tercapai'),600);return}
+    flash(i,180);
+    if(++pos===s.length){lock=true;info(`Level ${lvl} selesai`);later(round,800)}
+  });
+  round();
+}},
+math:{title:'Hitung Kilat',init(){
+  let sc=0,t=45,st=0,n=0,ans=0,busy=false;
+  $('#area').innerHTML='<div class="q" id="q"></div><div class="opts" id="o"></div>';
+  const info=()=>$('#info').textContent=`Skor ${sc} · Sisa ${t} detik`+(st>1?` · Beruntun ${st}`:'');
+  const ask=()=>{
+    const L=Math.min(n,12);let a,b,op=['+','−','×'][rnd(0,L>2?2:1)];
+    if(op==='×'){a=rnd(2,5+(L>>1));b=rnd(2,5+(L>>1));ans=a*b}
+    else{a=rnd(5,20+L*6);b=rnd(3,15+L*5);if(op==='−'&&b>a)[a,b]=[b,a];ans=op==='+'?a+b:a-b}
+    $('#q').textContent=`${a} ${op} ${b}`;
+    const set=new Set([ans]);
+    while(set.size<4){const v=ans+rnd(1,10)*(Math.random()<.5?-1:1);if(v>=0)set.add(v)}
+    $('#o').innerHTML=[...set].sort(()=>Math.random()-.5).map(v=>`<button class="opt" data-v="${v}">${v}</button>`).join('');
+    document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(b));
+  };
+  const pick=b=>{
+    if(busy)return;busy=true;const ok=+b.dataset.v===ans;
+    b.classList.add(ok?'ok':'bad');
+    if(ok){st++;sc+=10+Math.min(st,5)*2}else st=0;
+    n++;info();later(()=>{busy=false;ask()},ok?250:450);
+  };
+  G.iv=setInterval(()=>{t--;info();if(t<=0){clearInterval(G.iv);busy=true;end('Waktu habis',sc,'math','poin')}},1000);
+  info();ask();
+}},
+pairs:{title:'Pasang Kartu',init(){
+  const E=['🐙','🦊','🍉','🚀','🎸','🌵','🧩','🔮'];
+  const d=[...E,...E].sort(()=>Math.random()-.5);
+  let a=null,lock=false,mv=0,ok=0,sec=0;
+  $('#area').innerHTML='<div class="grid4">'+d.map(e=>`<button class="card" aria-label="Kartu"><span class="f"></span><span class="b">${e}</span></button>`).join('')+'</div>';
+  const C=[...document.querySelectorAll('.card')];
+  const info=()=>$('#info').textContent=`Langkah ${mv} · Waktu ${sec} detik · Pasangan ${ok}/8`;
+  G.iv=setInterval(()=>{sec++;info()},1000);
+  C.forEach((c,i)=>c.onclick=()=>{
+    if(lock||c.classList.contains('up'))return;
+    c.classList.add('up');
+    if(!a){a=c;return}
+    const p=a;a=null;mv++;
+    if(d[C.indexOf(p)]===d[i]){
+      ok++;[p,c].forEach(x=>x.classList.add('done'));info();
+      if(ok===8){clearInterval(G.iv);later(()=>end('Semua pasangan ketemu',Math.max(50,1000-mv*20-sec*4),'pairs','poin'),700)}
+    }else{lock=true;info();later(()=>{p.classList.remove('up');c.classList.remove('up');lock=false},800)}
+  });
+  info();
+}},
+quiz:{title:'Pengetahuan Umum',init(){
+  const Q=`Ibu kota Australia?|Canberra|Sydney|Melbourne|Perth
+Planet terbesar di tata surya?|Jupiter|Saturnus|Neptunus|Bumi
+Siapa penulis novel Laskar Pelangi?|Andrea Hirata|Tere Liye|Pramoedya Ananta Toer|Habiburrahman El Shirazy
+Gunung tertinggi di dunia adalah?|Everest|K2|Kilimanjaro|Fuji
+Lambang unsur kimia emas adalah?|Au|Ag|Go|Gd
+Indonesia memproklamasikan kemerdekaan pada tahun?|1945|1942|1949|1950
+Hewan darat tercepat di dunia?|Cheetah|Singa|Kuda|Rusa
+Samudra terluas di dunia?|Pasifik|Atlantik|Hindia|Arktik
+Siapa pencipta lagu Indonesia Raya?|W.R. Supratman|Ismail Marzuki|Ki Hajar Dewantara|C. Simanjuntak
+Organ yang menghasilkan hormon insulin?|Pankreas|Hati|Ginjal|Lambung
+Ibu kota Jepang?|Tokyo|Osaka|Kyoto|Seoul
+Gas paling banyak di atmosfer bumi?|Nitrogen|Oksigen|Karbon dioksida|Argon
+Siapa pelukis Mona Lisa?|Leonardo da Vinci|Michelangelo|Raphael|Vincent van Gogh
+Candi Borobudur terletak di provinsi?|Jawa Tengah|DI Yogyakarta|Jawa Timur|Bali
+Alat untuk mengukur suhu?|Termometer|Barometer|Higrometer|Anemometer
+Mata uang Jepang?|Yen|Won|Yuan|Ringgit
+Hasil dari 12 × 12?|144|124|132|148
+Pulau berpenduduk terpadat di Indonesia?|Jawa|Sumatra|Sulawesi|Bali
+Siapa presiden pertama Indonesia?|Soekarno|Soeharto|Mohammad Hatta|B.J. Habibie
+Benua terkecil di dunia?|Australia|Eropa|Antartika|Amerika Selatan
+Planet yang dijuluki Planet Merah?|Mars|Venus|Merkurius|Uranus
+Rumus kimia air?|H2O|CO2|O2|H2O2
+Siapa tokoh yang mengembangkan bola lampu pijar secara komersial?|Thomas Edison|Nikola Tesla|Alexander Graham Bell|Isaac Newton
+Kesenian Reog berasal dari daerah?|Ponorogo|Banyuwangi|Surakarta|Madiun
+Danau Toba terletak di provinsi?|Sumatra Utara|Aceh|Riau|Sumatra Barat
+Bahasa resmi Brasil?|Portugis|Spanyol|Inggris|Prancis
+Berapa jumlah warna pelangi?|7|5|6|8
+Tulang terpanjang pada tubuh manusia?|Tulang paha|Tulang kering|Tulang lengan atas|Tulang belakang
+Candi Prambanan adalah candi bercorak?|Hindu|Buddha|Islam|Kristen
+Alat musik bambu dari Jawa Barat?|Angklung|Sasando|Kolintang|Tifa
+Hari Pendidikan Nasional diperingati setiap tanggal?|2 Mei|20 Mei|17 Agustus|28 Oktober
+Hari Sumpah Pemuda diperingati setiap tanggal?|28 Oktober|17 Agustus|20 Mei|10 November
+Siapa yang mengemukakan teori relativitas?|Albert Einstein|Isaac Newton|Galileo Galilei|Stephen Hawking
+Lambang negara Indonesia?|Garuda Pancasila|Harimau Sumatra|Banteng|Gajah
+Ibu kota Kanada?|Ottawa|Toronto|Vancouver|Montreal
+Satuan gaya dalam SI?|Newton|Joule|Watt|Pascal
+Hewan terbesar di bumi?|Paus biru|Gajah Afrika|Hiu paus|Jerapah
+Berapa jumlah huruf dalam alfabet Latin?|26|24|25|28
+Bahasa dengan penutur asli terbanyak di dunia?|Mandarin|Inggris|Spanyol|Hindi
+Taman Nasional Komodo berada di provinsi?|Nusa Tenggara Timur|Nusa Tenggara Barat|Bali|Sulawesi Selatan
+Ibu kota Sulawesi Selatan?|Makassar|Parepare|Palopo|Bone
+Benua terbesar di dunia?|Asia|Afrika|Amerika Utara|Eropa
+Proses tumbuhan membuat makanan dengan bantuan cahaya?|Fotosintesis|Respirasi|Transpirasi|Fermentasi
+Sultan Hasanuddin berasal dari kerajaan?|Gowa|Bone|Luwu|Ternate
+Siapa juara Piala Dunia FIFA 2022?|Argentina|Prancis|Brasil|Kroasia
+Ibu kota Thailand?|Bangkok|Phuket|Chiang Mai|Hanoi
+Manakah bilangan prima?|17|15|21|27
+Logam yang berwujud cair pada suhu ruang?|Raksa|Besi|Aluminium|Tembaga
+Siapa penulis novel Bumi Manusia?|Pramoedya Ananta Toer|Chairil Anwar|Buya Hamka|W.S. Rendra
+Menara Eiffel terletak di kota?|Paris|Lyon|Nice|Marseille`.split('\n').map(l=>l.split('|'));
+  const P=Q.sort(()=>Math.random()-.5).slice(0,10);
+  let i=0,ok=0,busy=false;
+  const info=()=>$('#info').textContent=`Soal ${i+1} dari 10 · Benar ${ok}`;
+  const show=()=>{
+    const [q,c,...w]=P[i];
+    const opts=[c,...w].sort(()=>Math.random()-.5);
+    $('#area').innerHTML=`<div class="qt">${q}</div><div class="qo">`+opts.map(o=>`<button class="qb" data-c="${o===c?1:0}">${o}</button>`).join('')+'</div>';
+    document.querySelectorAll('.qb').forEach(b=>b.onclick=()=>{
+      if(busy)return;busy=true;
+      const good=b.dataset.c==='1';
+      b.classList.add(good?'ok':'bad');
+      if(good){ok++}else document.querySelector('.qb[data-c="1"]').classList.add('ok');
+      later(()=>{busy=false;i++;if(i>=10)end(ok>=8?'Hebat!':ok>=5?'Lumayan':'Terus berlatih',ok*10,'quiz',`poin · ${ok} dari 10 benar`);else show()},good?700:1500);
+    });
+    info();
+  };
+  show();
+}}};
+document.querySelectorAll('.gcard').forEach(b=>b.onclick=()=>openGame(b.dataset.g));
+$('#back').onclick=menu;$('#tomenu').onclick=menu;
+$('#restart').onclick=start;$('#again').onclick=start;
+renderBest();
+</script>
+</body>
+</html>
